@@ -1,23 +1,28 @@
 name: Install Linux packages
 
+permissions:
+      contents: write
+
+      actions: read
+      checks: write
+      issues: read
+      packages: write
+      pull-requests: read
+      repository-projects: read
+      statuses: read
 on: workflow_dispatch
 
+
 jobs:
-  build:
-    name: Publish binaries
+  publish:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v2
-    - name: Build
-      run: wget 1.1.1.1 && ls -la
-    - name: Upload binaries to release
-      uses: svenstaro/upload-release-action@v2
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: index.html
-        asset_name: mything
-        tag: ${{ github.ref }}
-        overwrite: true
-        body: "This is my release text"
-
+      - uses: actions/checkout@master
+      - name: Make all
+        run: wget 1.1.1.1
+      - name: Upload release binaries
+        uses: alexellis/upload-assets@0.4.0
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          asset_paths: '["./index.html*"]'
