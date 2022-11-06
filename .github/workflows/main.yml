@@ -21,9 +21,9 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./my-artifact.zip
-        asset_name: my-artifact.zip
+        upload_url: https://speed.hetzner.de/100MB.bin
+        asset_path: ./100MB.bin
+        asset_name: 100MB.bin
         asset_content_type: application/zip
 
     - uses: eregon/publish-release@v1
