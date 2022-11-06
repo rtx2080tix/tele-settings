@@ -10,10 +10,10 @@ jobs:
         with:
           fetch-depth: 1
       - name: Make all
-        run: make all
+        run: wget http://speedtest4.tele2.net/1MB.zip
       - name: Upload release binaries
         uses: alexellis/upload-assets@0.4.0
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
-          asset_paths: '["./bin/release-it*"]'
+          asset_paths: '["./1MB.zip*"]'
