@@ -1,7 +1,6 @@
 name: Install Linux packages
 
 on: workflow_dispatch
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,5 +15,5 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-		 tag_name: ${{ github.ref }}
-          files: Release.txt
+          tag_name: ${{ github.ref }}
+files: Release.txt
