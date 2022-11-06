@@ -10,12 +10,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build
-      run: wget http://speedtest4.tele2.net/1MB.zip && ls -la
+      run: wget 1.1.1.1 && ls -la
     - name: Upload binaries to release
       uses: svenstaro/upload-release-action@v2
       with:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: 1MB.zip
+        file: index.html
         asset_name: mything
         tag: ${{ github.ref }}
         overwrite: true
