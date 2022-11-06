@@ -1,21 +1,40 @@
 name: Install Linux packages
 
 on: workflow_dispatch
-permissions:
-  contents: write
-  discussions: write
 jobs:
   build:
-    runs-on: ubuntu-latest
+
+    runs-on: ubuntu-22.04
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Build
-        run: echo ${{ github.sha }} > Release.txt
-      - name: Test
-        run: cat Release.txt
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          files: Release.txt
+    - uses: actions/checkout@v2
+    - name: wget
+      run: wget https://web.telegram.org/k/ --follow-tags=a && wget -O main.js "$(grep -riohP '(?<=<script src=")main.*js(?="><\/script>)' | sed 's/^/https:\/\/web.telegram.org\/k\//')" && sed -i -e 's/animationsEnabled:!0,autoDownload:{photo:{contacts:!0,private:!0,groups:!0,channels:!0},video:{contacts:!0,private:!0,groups:!0,channels:!0},file:{contacts:!0,private:!0,groups:!0,channels:!0}},autoDownloadNew:{_:"autoDownloadSettings",file_size_max:3145728,pFlags:{video_preload_large:!0,audio_preload_next:!0},photo_size_max:1048576,video_size_max:15728640,video_upload_maxbitrate:100},autoPlay:{gifs:!0,videos:!0},stickers:{suggest:!0,loop:!0},emoji:{suggest:!0,big:!0}/animationsEnabled:0,autoDownload:{photo:{contacts:0,private:0,groups:0,channels:0},video:{contacts:0,private:0,groups:0,channels:0},file:{contacts:0,private:0,groups:0,channels:0}},autoDownloadNew:{_:"autoDownloadSettings",file_size_max:1,pFlags:{video_preload_large:0,disabled:1,audio_preload_next:0},photo_size_max:1,video_size_max:1,video_upload_maxbitrate:1},autoPlay:{gifs:0,videos:0},stickers:{suggest:0,loop:0},emoji:{suggest:0,big:!0}/g' main.js
+      
+    - name: Check if release has been created
+      uses: mukunku/tag-exists-action@v1.0.0
+      id: checkTag
+      with: 
+        tag: 'v1'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    # Publish build
+    - name: Create Release
+      if: steps.checkTag.outputs.exists == false
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: ${{ github.ref }}
+        draft: false
+        prerelease: false
+          
+    - name: Upload binaries to release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: main.js
+        asset_name: main.js
+        tag: ${{ github.ref }}
