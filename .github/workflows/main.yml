@@ -30,6 +30,3 @@ jobs:
           asset_path: ./index.html
           asset_name: index.html
           asset_content_type: application/zip
-
-		  
-		  
