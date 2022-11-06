@@ -3,17 +3,21 @@ name: Install Linux packages
 on: workflow_dispatch
 
 jobs:
-  publish:
+  build:
+    name: Publish binaries
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@master
-        with:
-          fetch-depth: 1
-      - name: Make all
-        run: wget http://speedtest4.tele2.net/1MB.zip
-      - name: Upload release binaries
-        uses: alexellis/upload-assets@0.4.0
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          asset_paths: '["./1MB.zip*"]'
+    - uses: actions/checkout@v2
+    - name: Build
+      run: wget http://speedtest4.tele2.net/1MB.zip
+    - name: Upload binaries to release
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: 1MB.zip
+        asset_name: mything
+        tag: ${{ github.ref }}
+        overwrite: true
+        body: "This is my release text"
+
