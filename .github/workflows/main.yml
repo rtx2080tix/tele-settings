@@ -22,7 +22,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: https://speed.hetzner.de/100MB.bin
-        asset_path: 100MB.bin
         asset_name: 100MB.bin
         asset_content_type: application/zip
 
