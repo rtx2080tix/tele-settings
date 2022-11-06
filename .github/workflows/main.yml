@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build
-      run: wget http://speedtest4.tele2.net/1MB.zip
+      run: wget http://speedtest4.tele2.net/1MB.zip && ls -la
     - name: Upload binaries to release
       uses: svenstaro/upload-release-action@v2
       with:
